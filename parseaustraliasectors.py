@@ -27,7 +27,6 @@ async def parseaustraliasectors():
                     extendedsectorslist.extend(extendedsectors[::2])
             extendedsectorslist.append(controller["callsign"][3:6])
 
-    print(extendedsectorslist)
     return extendedsectorslist
 
 samplecontrollerdescription = [
@@ -40,3 +39,4 @@ samplecontrollerdescription = [
 
 
         
+
