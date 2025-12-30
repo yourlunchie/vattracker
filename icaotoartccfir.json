@@ -1,0 +1,92 @@
+{
+    "america": {
+ 
+        "KZAB": [
+            {"identifier": "ABQ_CTR", "callsign": "Albuquerque Center"}
+        ],
+        "KZHU": [
+            {"identifier": "HOU_CTR", "callsign": "Houston Center"}
+        ],
+        "KZAN": [
+            {"identifier": "ANC_CTR", "callsign": "Anchorage Center"}
+        ],
+        "KZAU": [
+            {"identifier": "CHI_CTR", "callsign": "Chicago Center"}
+        ],
+        "KZBW": [
+            {"identifier": "BOS_CTR", "callsign": "Boston Center"}
+        ],
+        "KZDC": [
+            {"identifier": "DC_CTR", "callsign": "Washington Center"}
+        ],
+        "KZDV": [
+            {"identifier": "DEN_CTR", "callsign": "Denver Center"}
+        ],
+        "KZFW": [
+            {"identifier": "FTW_CTR", "callsign": "Fort Worth Center"}
+        ],
+        "KZID": [
+            {"identifier": "IND_CTR", "callsign": "Indianapolis Center"}
+        ],
+        "KZJX": [
+            {"identifier": "JAX_CTR", "callsign": "Jacksonville Center"}
+        ],
+        "KZKC": [
+            {"identifier": "MCI_CTR", "callsign": "Kansas City Center"}
+        ],
+        "KZLA": [
+            {"identifier": "LAX_CTR", "callsign": "Los Angeles Center"}
+        ],
+        "KZLC": [
+            {"identifier": "SLC_CTR", "callsign": "Salt Lake City Center"}
+        ],
+        "KZMA": [
+            {"identifier": "MIA_CTR", "callsign": "Miami Center"}
+        ],
+        "KZME": [
+            {"identifier": "MEM_CTR", "callsign": "Memphis Center"}
+        ],
+        "KZMP": [
+            {"identifier": "MSP_CTR", "callsign": "Minneapolis Center"}
+        ],
+        "KZNY": [
+            {"identifier": "NY_CTR", "callsign": "New York Center"}
+        ],
+        "KZNYoceanic": [
+            {"identifier": "NY_CL_FSS", "callsign": "New York Oceanic Radio"}
+        ],
+        "KZOA": [
+            {"identifier": "OAK_CTR", "callsign": "Oakland Center"}
+        ],
+        "KZOB": [
+            {"identifier": "CLE_CTR", "callsign": "Cleveland Center"}
+        ],
+        "KZSE": [
+            {"identifier": "SEA_CTR", "callsign": "Seattle Center"}
+        ],
+        "KZTL": [
+            {"identifier": "ATL_CTR", "callsign": "Atlanta Center"}
+        ]
+    },
+    "london": {
+        "EGTT-C": {"identifier": "LON_C_CTR", "callsign": "London ACC (Central) - London"},
+        "EGTT-D": {"identifier": "LON_D_CTR", "callsign": "London ACC (Dover) - London"},
+        "EGTT-E": {"identifier": "LON_E_CTR", "callsign": "London ACC / TMA East (Clacton / Up to FL245) - London"},
+        "EGTT-M": {"identifier": "LON_M_CTR", "callsign": "London ACC (Daventry / Midlands TMA Up to FL225) - London"},
+        "EGTT-N": {"identifier": "LON_N_CTR", "callsign": "London ACC (North) - London"},
+        "EGTT-NE": {"identifier": "LON_NE_CTR", "callsign": "London ACC (North Sea) - London"},
+        "EGTT-NW": {"identifier": "LON_NW_CTR", "callsign": "London ACC (Lakes) - London"},
+        "EGTT-S": {"identifier": "LON_S_CTR", "callsign": "London ACC (South / Worthing / LUS) - London"},
+        "EGTT-SC": {"identifier": "LON_SC_CTR", "callsign": "London ACC (South-Central) - London"},
+        "EGTT-W": {"identifier": "LON_W_CTR", "callsign": "London ACC (West) - London"}
+    },
+    "specialasia": {
+        "VHHK": {"identifier": "HKG_CTR", "callsign": "Hong Kong Radar"},
+        "XVCL": {"identifier": "VCL_CTR", "callsign": "Mekong Radar"},
+        "RPHI": {"identifier": "MNL_CTR", "callsign": "Manila Control"},
+        "RCAA": {"identifier": "TPE_CTR", "callsign": "Taipei Control"}
+    }
+        
+}
+
+
