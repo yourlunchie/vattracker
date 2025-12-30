@@ -9,7 +9,7 @@ from discord import app_commands
 from typing import Optional
 import activetrackfile
 
-load_dotenv(".env.dev")
+load_dotenv(".env")
 token = os.getenv("DISCORD_TOKEN")
 ownerrole = "owner"
 guildid = 1397781715879071894
