@@ -41,7 +41,7 @@ async def credits(interaction: discord.Interaction):
     creditsembed.add_field(name="Friends who helped me along the way", value="**Argon** - thank u for server hosting and being a good friend \n**thereal** - the person who inspired me to learn programming\n**alphagolfcharlie** - help on the code")
     await interaction.response.send_message(embed=creditsembed)
 
-@bot.tree.command(name="weather", description="Shows METAR data from an airport", guild=Guild)
+@bot.tree.command(name="weather", description="Shows METAR data from an airport")
 async def weather(interaction: discord.Interaction, airport: str):
     weatherwebsite = (f"https://aviationweather.gov/api/data/metar?ids={airport.upper()}&format=json")
     weatherdataraw = requests.get(weatherwebsite)
@@ -171,7 +171,7 @@ async def aircraftinfo(interaction: discord.Interaction, callsign:Optional[str] 
                 )
                 await interaction.response.send_message(embed=noaicraftembedcid)
 
-@bot.tree.command(name="arrivalboard", description="Show arrivals at an airport",guild=Guild)
+@bot.tree.command(name="arrivalboard", description="Show arrivals at an airport")
 async def arrivalboard(interaction: discord.Interaction, airport: str):
     arrivalcounter = 0
     if len(airport) > 4 or len(airport) < 4:
