@@ -2,4 +2,5 @@
 .env
 discord.log
 __pycache__
+currenttracks.json
 .gitignoregi
