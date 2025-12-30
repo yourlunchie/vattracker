@@ -128,7 +128,8 @@ def starttrackloop(bot):
                                         userid = await bot.fetch_user(track["user_id"])
                                         message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["america"][foundartcc][0]["callsign"]}."
                                         await userid.send(message)
-                                        tracksdata[callsign]["pinged_artccs"].append(foundartcc)
+                                        artccappend = foundartcc[:4]
+                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                         with open("currenttracks.json", "w") as file:
                                             json.dump(tracksdata, file)
                                         return
@@ -138,7 +139,8 @@ def starttrackloop(bot):
                                         userid = await bot.fetch_user(track["user_id"])
                                         message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - New York Oceanic Radio."
                                         await userid.send(message)
-                                        tracksdata[callsign]["pinged_artccs"].append(foundartcc)
+                                        artccappend = foundartcc[:4]
+                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                         with open("currenttracks.json", "w") as file:
                                             json.dump(tracksdata, file)
                                         return                                                                      
@@ -149,7 +151,8 @@ def starttrackloop(bot):
                                         userid = await bot.fetch_user(track["user_id"])
                                         message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["london"][foundartcc]["callsign"]}."
                                         await userid.send(message)
-                                        tracksdata[callsign]["pinged_artccs"].append(foundartcc)
+                                        artccappend = foundartcc[:4]
+                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                         with open("currenttracks.json", "w") as file:
                                             json.dump(tracksdata, file)
                                         return                                        
@@ -164,7 +167,8 @@ def starttrackloop(bot):
                                             userid = await bot.fetch_user(track["user_id"])
                                             message = f"<@{userid.id}>, your flight **{callsign}** is entering **{foundartcc}**."
                                             await userid.send(message)
-                                            tracksdata[callsign]["pinged_artccs"].append(foundartcc)
+                                            artccappend = foundartcc[:4] 
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                             with open("currenttracks.json", "w") as file:
                                                 json.dump(tracksdata, file)
                                             return
@@ -178,7 +182,8 @@ def starttrackloop(bot):
                                         userid = await bot.fetch_user(track["user_id"])
                                         message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["specialasia"][foundartcc]["callsign"]}."
                                         await userid.send(message)
-                                        tracksdata[callsign]["pinged_artccs"].append(foundartcc)
+                                        artccappend = foundartcc[:4]
+                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                         with open("currenttracks.json", "w") as file:
                                             json.dump(tracksdata, file)
                                         return                                        
@@ -190,7 +195,8 @@ def starttrackloop(bot):
                                         userid = await bot.fetch_user(track["user_id"])
                                         message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}**."
                                         await userid.send(message)
-                                        tracksdata[callsign]["pinged_artccs"].append(foundartcc)
+                                        artccappend = foundartcc[:4] 
+                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                         with open("currenttracks.json", "w") as file:
                                             json.dump(tracksdata, file)
                                         return
