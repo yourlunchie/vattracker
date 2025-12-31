@@ -66,19 +66,21 @@
         ],
         "KZTL": [
             {"identifier": "ATL_CTR", "callsign": "Atlanta Center"}
-        ]
-    },
+        ],
+        "KZAK": [
+            {"identifier": "ZAK_FSS", "callsign": "Oakland Oceanic"}
+        ]},
     "london": {
-        "EGTT-C": {"identifier": "LON_C_CTR", "callsign": "London ACC (Central) - London"},
-        "EGTT-D": {"identifier": "LON_D_CTR", "callsign": "London ACC (Dover) - London"},
-        "EGTT-E": {"identifier": "LON_E_CTR", "callsign": "London ACC / TMA East (Clacton / Up to FL245) - London"},
-        "EGTT-M": {"identifier": "LON_M_CTR", "callsign": "London ACC (Daventry / Midlands TMA Up to FL225) - London"},
-        "EGTT-N": {"identifier": "LON_N_CTR", "callsign": "London ACC (North) - London"},
-        "EGTT-NE": {"identifier": "LON_NE_CTR", "callsign": "London ACC (North Sea) - London"},
-        "EGTT-NW": {"identifier": "LON_NW_CTR", "callsign": "London ACC (Lakes) - London"},
-        "EGTT-S": {"identifier": "LON_S_CTR", "callsign": "London ACC (South / Worthing / LUS) - London"},
-        "EGTT-SC": {"identifier": "LON_SC_CTR", "callsign": "London ACC (South-Central) - London"},
-        "EGTT-W": {"identifier": "LON_W_CTR", "callsign": "London ACC (West) - London"}
+        "EGTT-C": {"identifier": "LON_C_CTR", "callsign": "London Control - Central"},
+        "EGTT-D": {"identifier": "LON_D_CTR", "callsign": "London Control - Dover"},
+        "EGTT-E": {"identifier": "LON_E_CTR", "callsign": "London Control - Clacton"},
+        "EGTT-M": {"identifier": "LON_M_CTR", "callsign": "London Control - Daventry"},
+        "EGTT-N": {"identifier": "LON_N_CTR", "callsign": "London Control - North"},
+        "EGTT-NE": {"identifier": "LON_NE_CTR", "callsign": "London Control - North Sea"},
+        "EGTT-NW": {"identifier": "LON_NW_CTR", "callsign": "London Control - Lakes"},
+        "EGTT-S": {"identifier": "LON_S_CTR", "callsign": "London Control - South"},
+        "EGTT-SC": {"identifier": "LON_SC_CTR", "callsign": "London Control - South Central"},
+        "EGTT-W": {"identifier": "LON_W_CTR", "callsign": "London Control - West"}
     },
     "specialasia": {
         "VHHK": {"identifier": "HKG_CTR", "callsign": "Hong Kong Radar"},
@@ -89,8 +91,7 @@
     "shanwickgander": {
         "EGGX": {"identifier": "NAT_FSS", "callsign": "Shanwick Radio"},
         "CZQO": {"identifier": "NAT_FSS", "callsign": "Gander Radio"}
-    }
-        
+    }  
 }
 
 
