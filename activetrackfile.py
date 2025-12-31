@@ -197,7 +197,7 @@ def starttrackloop(bot):
                                 elif isshanwickganderoceanic == True:
                                     if icaotoartcc["shanwickgander"][foundartcc]["identifier"] == onlineatc["callsign"]:
                                         userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["specialasia"][foundartcc]["callsign"]}."
+                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["shanwickgander"][foundartcc]["callsign"]}."
                                         await userid.send(message)
                                         artccappend = foundartcc[:4] 
                                         tracksdata[callsign]["pinged_artccs"].append(artccappend)
