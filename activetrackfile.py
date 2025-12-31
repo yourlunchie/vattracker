@@ -69,11 +69,12 @@ def starttrackloop(bot):
             # always do TWO variables after "for" for any dictionaries, and put .items() - the first variable is the DICTIONARY KEY
             foundtrack = False
             specialvatusacallsign = False
-            vatpaccallsign = False
-            newyorkoceanic = False
             londoncallsign = False
             asiancallsign = False
-            
+            vatpaccallsign = False
+            isshanwickganderoceanic = False
+            newyorkoceanic = False
+
             for pilots in vatsimdata["pilots"]:
                 if callsign == pilots["callsign"]:
                     foundtrack = pilots
@@ -105,6 +106,7 @@ def starttrackloop(bot):
                                     foundartcc = foundartcc[:4]
                                     diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
                                     specialvatusacallsign = True
+
                             elif foundartcc.startswith("Y"):
                                 # its australia
                                 australiasectors =  await parseaustraliasectors.parseaustraliasectors()
@@ -113,7 +115,11 @@ def starttrackloop(bot):
                                 # its LONDON control
                                 londoncallsignstr = icaotoartcc["london"][foundartcc]["identifier"]
                                 londoncallsign = True
-                            # check if they're in an asian FIR
+                            elif foundartcc == "EGGX" or foundartcc == "CZQO":
+                                isshanwickganderoceanic = True
+                                print(foundartcc)
+
+                            # check if they're in an asian FIR as they start with different stuff
                             for fir in icaotoartcc["specialasia"]:
                                 if foundartcc[:4] == fir:
                                     asiancallsign = True
@@ -188,12 +194,23 @@ def starttrackloop(bot):
                                             json.dump(tracksdata, file)
                                         return                                        
 
+                                elif isshanwickganderoceanic == True:
+                                    if icaotoartcc["shanwickgander"][foundartcc]["identifier"] == onlineatc["callsign"]:
+                                        userid = await bot.fetch_user(track["user_id"])
+                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["specialasia"][foundartcc]["callsign"]}."
+                                        await userid.send(message)
+                                        artccappend = foundartcc[:4] 
+                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                        with open("currenttracks.json", "w") as file:
+                                            json.dump(tracksdata, file)
+                                        return
+
                                 else:
                                     # if its a ARTCC/FIR starting with its ICAOdesignator and doesnt fulfill any special conditions
                                     if onlineatc["callsign"].startswith(foundartcc[:4]) and onlineatc["callsign"].endswith("_CTR"):
                                         # i get the data about the pilot and send a DM
                                         userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}**."
+                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["shanwickgander"][foundartcc]["callsign"]}."
                                         await userid.send(message)
                                         artccappend = foundartcc[:4] 
                                         tracksdata[callsign]["pinged_artccs"].append(artccappend)

@@ -85,6 +85,10 @@
         "XVCL": {"identifier": "VCL_CTR", "callsign": "Mekong Radar"},
         "RPHI": {"identifier": "MNL_CTR", "callsign": "Manila Control"},
         "RCAA": {"identifier": "TPE_CTR", "callsign": "Taipei Control"}
+    },
+    "shanwickgander": {
+        "EGGX": {"identifier": "NAT_FSS", "callsign": "Shanwick Radio"},
+        "CZQO": {"identifier": "NAT_FSS", "callsign": "Gander Radio"}
     }
         
 }

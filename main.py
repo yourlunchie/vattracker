@@ -67,8 +67,8 @@ async def weather(interaction: discord.Interaction, airport: str):
             weatherembed.add_field(name="Winds", value=f"{weatherdata["wdir"]}° at {weatherdata["wspd"]}kts", inline=False)
         
         #temperature and dew point
-        weatherembed.add_field(name="Temperature", value=f"{weatherdata["temp"]}°", inline=True)
-        weatherembed.add_field(name="Dew Point", value=f"{weatherdata["dewp"]}°", inline=True)
+        weatherembed.add_field(name="Temperature", value=f"{weatherdata["temp"]}°C", inline=True)
+        weatherembed.add_field(name="Dew Point", value=f"{weatherdata["dewp"]}°C", inline=True)
 
         #clouds
         cloudembedvalue = ""
