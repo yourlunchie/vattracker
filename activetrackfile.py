@@ -66,174 +66,180 @@ def starttrackloop(bot):
         vatsimdata = requests.get("https://data.vatsim.net/v3/vatsim-data.json").json()
 
         for callsign, track in tracksdata.items():
-            # always do TWO variables after "for" for any dictionaries, and put .items() - the first variable is the DICTIONARY KEY
-            foundtrack = False
-            specialvatusacallsign = False
-            londoncallsign = False
-            asiancallsign = False
-            vatpaccallsign = False
-            isshanwickganderoceanic = False
-            newyorkoceanic = False
-            iscanada = False
+            try:
+                # always do TWO variables after "for" for any dictionaries, and put .items() - the first variable is the DICTIONARY KEY
+                foundtrack = False
+                specialvatusacallsign = False
+                londoncallsign = False
+                asiancallsign = False
+                vatpaccallsign = False
+                isshanwickganderoceanic = False
+                newyorkoceanic = False
+                iscanada = False
 
-            for pilots in vatsimdata["pilots"]:
-                if callsign == pilots["callsign"]:
-                    foundtrack = pilots
-                    break
-            if foundtrack:
-                latitude = foundtrack["latitude"]
-                longitude = foundtrack["longitude"]
-                point = Point(longitude, latitude)
-                for polygon in artccpolygons:
-                    if point.within(polygon["polygon"]):
-                        foundartcc = polygon["name"]
-                        if foundartcc[:4] in track["pinged_artccs"]:
-                            break
-                            # stop program as ARTCC/FIR has been pinged already
-                        else:
-                            if foundartcc.startswith("K"):
-                                # its america
-                                if foundartcc == "KZNY":
-                                    # its new york i have to see if its new york center or radio
-                                    if polygon["oceanic"] == "1":                                        
-                                        #checking if its NEW YORK OCEANIC
-                                        newyorkoceanic = True
+                for pilots in vatsimdata["pilots"]:
+                    if callsign == pilots["callsign"]:
+                        foundtrack = pilots
+                        break
+                if foundtrack:
+                    latitude = foundtrack["latitude"]
+                    longitude = foundtrack["longitude"]
+                    point = Point(longitude, latitude)
+                    for polygon in artccpolygons:
+                        if point.within(polygon["polygon"]):
+                            foundartcc = polygon["name"]
+                            if foundartcc[:4] in track["pinged_artccs"]:
+                                break
+                                # stop program as ARTCC/FIR has been pinged already
+                            else:
+                                if foundartcc.startswith("K"):
+                                    # its america
+                                    if foundartcc == "KZNY":
+                                        # its new york i have to see if its new york center or radio
+                                        if polygon["oceanic"] == "1":                                        
+                                            #checking if its NEW YORK OCEANIC
+                                            newyorkoceanic = True
+                                        else:
+                                            # if its just new york center we proceed as normal
+                                            foundartcc = foundartcc[:4]
+                                            diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
+                                            specialvatusacallsign = True                            
                                     else:
-                                        # if its just new york center we proceed as normal
                                         foundartcc = foundartcc[:4]
                                         diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
-                                        specialvatusacallsign = True                            
-                                else:
-                                    foundartcc = foundartcc[:4]
-                                    diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
-                                    specialvatusacallsign = True
+                                        specialvatusacallsign = True
 
-                            elif foundartcc.startswith("Y"):
-                                # its australia
-                                australiasectors =  await parseaustraliasectors.parseaustraliasectors()
-                                vatpaccallsign = True
-                            elif foundartcc.startswith("EGTT-"):
-                                # its LONDON control
-                                londoncallsignstr = icaotoartcc["london"][foundartcc]["identifier"]
-                                londoncallsign = True
-                            elif foundartcc == "EGGX" or foundartcc == "CZQO":
-                                isshanwickganderoceanic = True
-                            elif foundartcc == "CZYZ":
-                                # its czyz rn cuz to my knowledge other canadian FIRs use XXXX_CTR
-                                iscanada = True
+                                elif foundartcc.startswith("Y"):
+                                    # its australia
+                                    australiasectors =  await parseaustraliasectors.parseaustraliasectors()
+                                    vatpaccallsign = True
+                                elif foundartcc.startswith("EGTT-"):
+                                    # its LONDON control
+                                    londoncallsignstr = icaotoartcc["london"][foundartcc]["identifier"]
+                                    londoncallsign = True
+                                elif foundartcc == "EGGX" or foundartcc == "CZQO":
+                                    isshanwickganderoceanic = True
+                                elif foundartcc == "CZYZ":
+                                    # its czyz rn cuz to my knowledge other canadian FIRs use XXXX_CTR
+                                    iscanada = True
 
-                            # check if they're in an asian FIR as they start with different stuff
-                            for fir in icaotoartcc["specialasia"]:
-                                if foundartcc[:4] == fir:
-                                    asiancallsign = True
-                            
-                            for onlineatc in vatsimdata["controllers"]:
+                                # check if they're in an asian FIR as they start with different stuff
+                                for fir in icaotoartcc["specialasia"]:
+                                    if foundartcc[:4] == fir:
+                                        asiancallsign = True
                                 
-                                if specialvatusacallsign == True:
-                                    atccallsign = onlineatc["callsign"]
-                                    parsedcallsign = atccallsign[:3] + atccallsign[-4:]
-                                    if diffvatusacentercallsign == parsedcallsign:
-                                        # i get the data about the pilot and send a DM
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["america"][foundartcc][0]["callsign"]}."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4]
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return
-                                
-                                elif newyorkoceanic == True:
-                                    if onlineatc["callsign"] == "NY_CL_FSS":
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - New York Oceanic Radio."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4]
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return                                                                      
-
-
-                                elif londoncallsign == True:
-                                    if onlineatc["callsign"] == londoncallsignstr:
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["london"][foundartcc]["callsign"]}."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4]
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return                                        
-
+                                for onlineatc in vatsimdata["controllers"]:
                                     
-                                elif vatpaccallsign == True:
-                                    # i get the data about the pilot and send a DM
-                                    # once i get the list from here, i run for X in list, then check if the artcc is in that found list with regex
-                                    # i dont use onlineatc here, as i have a seperate .py file which gives ALL sectors in australia
-                                    for sector in australiasectors:
-                                        if sector == foundartcc[1:4]:
+                                    if specialvatusacallsign == True:
+                                        atccallsign = onlineatc["callsign"]
+                                        parsedcallsign = atccallsign[:3] + atccallsign[-4:]
+                                        if diffvatusacentercallsign == parsedcallsign:
+                                            # i get the data about the pilot and send a DM
                                             userid = await bot.fetch_user(track["user_id"])
-                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{foundartcc}**."
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["america"][foundartcc][0]["callsign"]}."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4]
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+                                            return
+                                    
+                                    elif newyorkoceanic == True:
+                                        if onlineatc["callsign"] == "NY_CL_FSS":
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - New York Oceanic Radio."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4]
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+                                            return                                                                      
+
+
+                                    elif londoncallsign == True:
+                                        if onlineatc["callsign"] == londoncallsignstr:
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["london"][foundartcc]["callsign"]}."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4]
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+                                            return                                        
+
+                                        
+                                    elif vatpaccallsign == True:
+                                        # i get the data about the pilot and send a DM
+                                        # once i get the list from here, i run for X in list, then check if the artcc is in that found list with regex
+                                        # i dont use onlineatc here, as i have a seperate .py file which gives ALL sectors in australia
+                                        for sector in australiasectors:
+                                            if sector == foundartcc[1:4]:
+                                                userid = await bot.fetch_user(track["user_id"])
+                                                message = f"<@{userid.id}>, your flight **{callsign}** is entering **{foundartcc}**."
+                                                await userid.send(message)
+                                                artccappend = foundartcc[:4] 
+                                                tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                                with open("currenttracks.json", "w") as file:
+                                                    json.dump(tracksdata, file)
+                                                return
+                                    
+                                    elif asiancallsign == True:
+                                        foundartcc = foundartcc[:4]
+                                        atccallsign = onlineatc["callsign"]
+                                        parsedcallsign = atccallsign[:3] + atccallsign[-4:]
+                                        # makes it easier to hunt the icaotoartcc dict
+                                        if icaotoartcc["specialasia"][foundartcc]["identifier"] == parsedcallsign:
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["specialasia"][foundartcc]["callsign"]}."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4]
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+                                            return                                        
+
+                                    elif isshanwickganderoceanic == True:
+                                        if icaotoartcc["shanwickgander"][foundartcc]["identifier"] == onlineatc["callsign"]:
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["shanwickgander"][foundartcc]["callsign"]}."
                                             await userid.send(message)
                                             artccappend = foundartcc[:4] 
                                             tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                             with open("currenttracks.json", "w") as file:
                                                 json.dump(tracksdata, file)
                                             return
-                                
-                                elif asiancallsign == True:
-                                    foundartcc = foundartcc[:4]
-                                    atccallsign = onlineatc["callsign"]
-                                    parsedcallsign = atccallsign[:3] + atccallsign[-4:]
-                                    # makes it easier to hunt the icaotoartcc dict
-                                    if icaotoartcc["specialasia"][foundartcc]["identifier"] == parsedcallsign:
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["specialasia"][foundartcc]["callsign"]}."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4]
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return                                        
+                                        
+                                    elif iscanada == True:
+                                        foundartcc = foundartcc[:4]
+                                        atccallsign = onlineatc["callsign"]
+                                        parsedcallsign = atccallsign[:3] + atccallsign[-4:]                                    
+                                        if icaotoartcc["canada"][foundartcc]["identifier"] == parsedcallsign:
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["canada"][foundartcc]["callsign"]}."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4] 
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+                                            return                                        
 
-                                elif isshanwickganderoceanic == True:
-                                    if icaotoartcc["shanwickgander"][foundartcc]["identifier"] == onlineatc["callsign"]:
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["shanwickgander"][foundartcc]["callsign"]}."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4] 
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return
-                                    
-                                elif iscanada == True:
-                                    foundartcc = foundartcc[:4]
-                                    atccallsign = onlineatc["callsign"]
-                                    parsedcallsign = atccallsign[:3] + atccallsign[-4:]                                    
-                                    if icaotoartcc["canada"][foundartcc]["identifier"] == parsedcallsign:
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["canada"][foundartcc]["callsign"]}."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4] 
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return                                        
-
-                                else:
-                                    # if its a ARTCC/FIR starting with its ICAOdesignator and doesnt fulfill any special conditions
-                                    if onlineatc["callsign"].startswith(foundartcc[:4]) and onlineatc["callsign"].endswith("_CTR"):
-                                        # i get the data about the pilot and send a DM
-                                        userid = await bot.fetch_user(track["user_id"])
-                                        message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}**."
-                                        await userid.send(message)
-                                        artccappend = foundartcc[:4] 
-                                        tracksdata[callsign]["pinged_artccs"].append(artccappend)
-                                        with open("currenttracks.json", "w") as file:
-                                            json.dump(tracksdata, file)
-                                        return
+                                    else:
+                                        # if its a ARTCC/FIR starting with its ICAOdesignator and doesnt fulfill any special conditions
+                                        if onlineatc["callsign"].startswith(foundartcc[:4]) and onlineatc["callsign"].endswith("_CTR"):
+                                            # i get the data about the pilot and send a DM
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}**."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4] 
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+            
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                print(f"oop i broke {callsign, None}, {foundartcc, None}, {e}")
+                continue
 
     @tasks.loop(seconds=30)
     async def deletionloop():
@@ -244,6 +250,7 @@ def starttrackloop(bot):
         for aircraft, items in trackdata.items():
             still_online = False
             for callsign in vatsimdata["pilots"]:
+
                 aircraftcallsign = callsign["callsign"]
                 if aircraft == aircraftcallsign:
                     still_online = True
