@@ -17,7 +17,7 @@
             {"identifier": "BOS_CTR", "callsign": "Boston Center"}
         ],
         "KZDC": [
-            {"identifier": "DC_CTR", "callsign": "Washington Center"}
+            {"identifier": "DC__CTR", "callsign": "Washington Center"}
         ],
         "KZDV": [
             {"identifier": "DEN_CTR", "callsign": "Denver Center"}
@@ -50,7 +50,7 @@
             {"identifier": "MSP_CTR", "callsign": "Minneapolis Center"}
         ],
         "KZNY": [
-            {"identifier": "NY_CTR", "callsign": "New York Center"}
+            {"identifier": "NY__CTR", "callsign": "New York Center"}
         ],
         "KZNYoceanic": [
             {"identifier": "NY_CL_FSS", "callsign": "New York Oceanic Radio"}
