@@ -25,8 +25,6 @@ def activetrackcommand(bot):
 
     @bot.tree.command(name="activetrack", description="Tracks your aircraft on the network, and DMs you if entering an active ARTCC/FIR")
     async def activetrack(interaction: discord.Interaction, callsign: str):
-        import os
-        print("CWD:", os.getcwd())
         with open("currenttracks.json", "r") as file:
             currenttracks = json.load(file)
         currenttracks[callsign.upper()] = {
@@ -90,7 +88,7 @@ def starttrackloop(bot):
                     if point.within(polygon["polygon"]):
                         foundartcc = polygon["name"]
                         if foundartcc[:4] in track["pinged_artccs"]:
-                            break
+                            return
                             # stop program as ARTCC/FIR has been pinged already
                         else:
                             if foundartcc.startswith("K"):
