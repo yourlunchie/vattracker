@@ -94,16 +94,9 @@ def starttrackloop(bot):
                             else:
                                 if foundartcc[:4] in icaotoartcc["america"]:
                                     # its america
-                                    if foundartcc == "KZNY":
-                                        # its new york i have to see if its new york center or radio
-                                        if polygon["oceanic"] == "1":                                        
-                                            #checking if its NEW YORK OCEANIC
-                                            newyorkoceanic = True
-                                        else:
-                                            # if its just new york center we proceed as normal
-                                            foundartcc = foundartcc[:4]
-                                            diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
-                                            vatusa_callsign = True                            
+                                    if foundartcc == "KZNY" and polygon["oceanic"] == "1":
+                                        # it is KZNY oceanic sector
+                                        newyorkoceanic = True
                                     else:
                                         foundartcc = foundartcc[:4]
                                         diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]

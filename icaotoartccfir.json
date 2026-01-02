@@ -49,9 +49,6 @@
         "KZNY": [
             {"identifier": "NY__CTR", "callsign": "New York Center"}
         ],
-        "KZNYoceanic": [
-            {"identifier": "NY_CL_FSS", "callsign": "New York Oceanic Radio"}
-        ],
         "KZOA": [
             {"identifier": "OAK_CTR", "callsign": "Oakland Center"}
         ],
