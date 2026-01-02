@@ -69,7 +69,7 @@ def starttrackloop(bot):
             try:
                 # always do TWO variables after "for" for any dictionaries, and put .items() - the first variable is the DICTIONARY KEY
                 foundtrack = False
-                specialvatusacallsign = False
+                vatusa_callsign = False
                 londoncallsign = False
                 asiancallsign = False
                 vatpaccallsign = False
@@ -92,7 +92,7 @@ def starttrackloop(bot):
                                 break
                                 # stop program as ARTCC/FIR has been pinged already
                             else:
-                                if foundartcc.startswith("K"):
+                                if foundartcc[:4] in icaotoartcc["america"]:
                                     # its america
                                     if foundartcc == "KZNY":
                                         # its new york i have to see if its new york center or radio
@@ -103,11 +103,11 @@ def starttrackloop(bot):
                                             # if its just new york center we proceed as normal
                                             foundartcc = foundartcc[:4]
                                             diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
-                                            specialvatusacallsign = True                            
+                                            vatusa_callsign = True                            
                                     else:
                                         foundartcc = foundartcc[:4]
                                         diffvatusacentercallsign = icaotoartcc["america"][foundartcc][0]["identifier"]
-                                        specialvatusacallsign = True
+                                        vatusa_callsign = True
 
                                 elif foundartcc.startswith("Y"):
                                     # its australia
@@ -122,7 +122,6 @@ def starttrackloop(bot):
                                 elif foundartcc == "CZYZ":
                                     # its czyz rn cuz to my knowledge other canadian FIRs use XXXX_CTR
                                     iscanada = True
-
                                 # check if they're in an asian FIR as they start with different stuff
                                 for fir in icaotoartcc["specialasia"]:
                                     if foundartcc[:4] == fir:
@@ -130,7 +129,7 @@ def starttrackloop(bot):
                                 
                                 for onlineatc in vatsimdata["controllers"]:
                                     
-                                    if specialvatusacallsign == True:
+                                    if vatusa_callsign == True:
                                         atccallsign = onlineatc["callsign"]
                                         parsedcallsign = atccallsign[:3] + atccallsign[-4:]
                                         if diffvatusacentercallsign == parsedcallsign:

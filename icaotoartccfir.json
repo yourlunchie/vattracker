@@ -7,9 +7,6 @@
         "KZHU": [
             {"identifier": "HOU_CTR", "callsign": "Houston Center"}
         ],
-        "KZAN": [
-            {"identifier": "ANC_CTR", "callsign": "Anchorage Center"}
-        ],
         "KZAU": [
             {"identifier": "CHI_CTR", "callsign": "Chicago Center"}
         ],
@@ -69,7 +66,14 @@
         ],
         "KZAK": [
             {"identifier": "ZAK_FSS", "callsign": "Oakland Oceanic"}
-        ]},
+        ],
+        "PHZH": [
+            {"identifier": "HNL_CTR", "callsign": "Honolulu Center"}
+        ],
+        "PAZA": [
+            {"identifier": "ANC_CTR", "callsign": "Anchorage Center"}
+        ]
+    },
     "london": {
         "EGTT-C": {"identifier": "LON_C_CTR", "callsign": "London Control - Central"},
         "EGTT-D": {"identifier": "LON_D_CTR", "callsign": "London Control - Dover"},
