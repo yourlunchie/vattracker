@@ -11,12 +11,11 @@ import activetrackfile
 
 load_dotenv(".env")
 token = os.getenv("DISCORD_TOKEN")
-ownerrole = "owner"
-guildid = 1397781715879071894
+# guildid = os.getenv("guildid") - use it if you need to test commands with guilds
 
 logging.basicConfig(filename="discord.log", level=logging.DEBUG)
 intents = discord.Intents.default()
-Guild = discord.Object(id=guildid)
+# Guild = discord.Object(id=guildid)
 
 bot = commands.Bot(command_prefix="/", intents=intents)
 
