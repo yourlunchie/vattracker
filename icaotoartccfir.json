@@ -29,7 +29,7 @@
             {"identifier": "JAX_CTR", "callsign": "Jacksonville Center"}
         ],
         "KZKC": [
-            {"identifier": "MCI_CTR", "callsign": "Kansas City Center"}
+            {"identifier": "KC__CTR", "callsign": "Kansas City Center"}
         ],
         "KZLA": [
             {"identifier": "LAX_CTR", "callsign": "Los Angeles Center"}
