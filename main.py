@@ -13,7 +13,7 @@ load_dotenv(".env")
 token = os.getenv("DISCORD_TOKEN")
 # guildid = os.getenv("guildid") - use it if you need to test commands with guilds
 
-logging.basicConfig(filename="discord.log", level=logging.DEBUG)
+logging.basicConfig(filename="discord.log",filemode="w", level=logging.ERROR)
 intents = discord.Intents.default()
 # Guild = discord.Object(id=guildid)
 

@@ -76,6 +76,7 @@ def starttrackloop(bot):
                 isshanwickganderoceanic = False
                 newyorkoceanic = False
                 iscanada = False
+                is_scottishcontrol = False
 
                 for pilots in vatsimdata["pilots"]:
                     if callsign == pilots["callsign"]:
@@ -110,6 +111,9 @@ def starttrackloop(bot):
                                     # its LONDON control
                                     londoncallsignstr = icaotoartcc["london"][foundartcc]["identifier"]
                                     londoncallsign = True
+                                elif foundartcc.startswith("EGPX"):
+                                    # its scottish control
+                                    is_scottishcontrol = True
                                 elif foundartcc == "EGGX" or foundartcc == "CZQO":
                                     isshanwickganderoceanic = True
                                 elif foundartcc == "CZYZ":
@@ -147,7 +151,6 @@ def starttrackloop(bot):
                                                 json.dump(tracksdata, file)
                                             return                                                                      
 
-
                                     elif londoncallsign == True:
                                         if onlineatc["callsign"] == londoncallsignstr:
                                             userid = await bot.fetch_user(track["user_id"])
@@ -157,9 +160,19 @@ def starttrackloop(bot):
                                             tracksdata[callsign]["pinged_artccs"].append(artccappend)
                                             with open("currenttracks.json", "w") as file:
                                                 json.dump(tracksdata, file)
-                                            return                                        
-
-                                        
+                                            return    
+                                                                            
+                                    elif is_scottishcontrol == True:
+                                        if onlineatc["callsign"] == icaotoartcc["scottish"][foundartcc]["identifier"]:
+                                            userid = await bot.fetch_user(track["user_id"])
+                                            message = f"<@{userid.id}>, your flight **{callsign}** is entering **{onlineatc["callsign"]}** - {icaotoartcc["scottish"][foundartcc]["callsign"]}."
+                                            await userid.send(message)
+                                            artccappend = foundartcc[:4]
+                                            tracksdata[callsign]["pinged_artccs"].append(artccappend)
+                                            with open("currenttracks.json", "w") as file:
+                                                json.dump(tracksdata, file)
+                                            return                                                
+                                    
                                     elif vatpaccallsign == True:
                                         # i get the data about the pilot and send a DM
                                         # once i get the list from here, i run for X in list, then check if the artcc is in that found list with regex

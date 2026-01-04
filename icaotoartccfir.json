@@ -29,7 +29,7 @@
             {"identifier": "JAX_CTR", "callsign": "Jacksonville Center"}
         ],
         "KZKC": [
-            {"identifier": "MCI_CTR", "callsign": "Kansas City Center"}
+            {"identifier": "KC__CTR", "callsign": "Kansas City Center"}
         ],
         "KZLA": [
             {"identifier": "LAX_CTR", "callsign": "Los Angeles Center"}
@@ -82,6 +82,15 @@
         "EGTT-S": {"identifier": "LON_S_CTR", "callsign": "London Control - South"},
         "EGTT-SC": {"identifier": "LON_SC_CTR", "callsign": "London Control - South Central"},
         "EGTT-W": {"identifier": "LON_W_CTR", "callsign": "London Control - West"}
+    },
+    "scottish": {
+        "EGPX": {"identifier": "SCO_CTR", "callsign": "Scottish Control - Combined"},
+        "EGPX-WD": {"identifier": "SCO_WD_CTR", "callsign": "Scottish Control - West/Deancross"},
+        "EGPX-W": {"identifier": "SCO_W_CTR", "callsign": "Scottish Control - Rathlin"},
+        "EGPX-S": {"identifier": "SCO_S_CTR", "callsign": "Scottish Control - South"},
+        "EGPX-N": {"identifier": "SCO_N_CTR", "callsign": "Scottish Control - North"},
+        "EGPX-D":{"identifier": "SCO_D_CTR", "callsign": "Scottish Control - Deancross"},
+        "EGPX-E": {"identifier": "SCO_W_CTR", "callsign": "Scottish Control - West"}
     },
     "specialasia": {
         "VHHK": {"identifier": "HKG_CTR", "callsign": "Hong Kong Radar"},
