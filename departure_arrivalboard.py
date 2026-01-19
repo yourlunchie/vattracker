@@ -148,6 +148,9 @@ def departure_arrival_board_commands(bot):
             if pilot_counter > 0:
                 # only add the container if we had added pilots into it for the last couple pilots that dont reach 8
                 self.containers.append(container)
+                if first_container_sent == False:
+                    self.add_item(self.containers[0]) 
+                    first_container_sent = True
 
         row = ui.ActionRow()
 
