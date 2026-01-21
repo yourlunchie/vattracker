@@ -166,7 +166,7 @@ def departure_arrival_board_commands(bot):
 
         @row.button(label="Next")
         async def next_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-            if self.page_count != 3:
+            if self.page_count != len(self.containers) - 1:
                 self.page_count += 1
             self.clear_items()
             self.add_item(self.containers[self.page_count])
