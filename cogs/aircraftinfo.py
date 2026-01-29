@@ -16,13 +16,16 @@ class AircraftInfo(commands.Cog):
         
     @app_commands.command(name="aircraftinfo", description="Shows information about an aircraft - fill in one search")
     async def aircraftinfo(self,interaction: discord.Interaction, callsign: Optional[str] = None, cid: Optional[int] = None):
-        vatsim_pilot_data = await utils.fetch_vatsim_api(callsign.upper())
-        if callsign:
+        if callsign and cid == None:
+            vatsim_pilot_data = await utils.fetch_vatsim_api(callsign.upper())
             view = View(vatsim_pilot_data, self.icao_airlines)
             view.create_vatsimradar_button(vatsim_pilot_data)
             await interaction.response.send_message(view=view)
-        elif cid:
-            for key, pilot in vatsim_pilot_data.items():
+        elif cid and callsign == None:
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://data.vatsim.net/v3/vatsim-data.json') as rawdata:
+                    vatsim_pilot_data = await rawdata.json()
+            for pilot in vatsim_pilot_data["pilots"]:
                 if pilot["cid"] == cid:
                     vatsim_pilot_data = pilot
             view = View(vatsim_pilot_data, self.icao_airlines)
