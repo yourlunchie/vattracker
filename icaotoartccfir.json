@@ -72,7 +72,7 @@
         ]
     },
     "london": {
-        "EGTT": {"identifier": "LON_CTR", "callsign": "London Control - Combined (wow it finally happened xd)"},
+        "EGTT": {"identifier": "LON_CTR", "callsign": "London Control - Combined"},
         "EGTT-C": {"identifier": "LON_C_CTR", "callsign": "London Control - Central"},
         "EGTT-D": {"identifier": "LON_D_CTR", "callsign": "London Control - Dover"},
         "EGTT-E": {"identifier": "LON_E_CTR", "callsign": "London Control - Clacton"},
