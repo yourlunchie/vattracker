@@ -8,9 +8,6 @@ import time
 from datetime import datetime, timezone
 import json
 
-async def setup(bot):
-    await bot.add_cog(AircraftInfo(bot))
-
 class AircraftInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -121,3 +118,6 @@ class utils():
         if floor_minutes_result < 60:
             result_string = f"{floor_minutes_result}m"
             return result_string
+
+async def setup(bot):
+    await bot.add_cog(AircraftInfo(bot))
