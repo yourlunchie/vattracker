@@ -15,16 +15,25 @@ class AircraftInfo(commands.Cog):
             self.icao_airlines = json.load(file)
         
     @app_commands.command(name="aircraftinfo", description="Shows information about an aircraft - fill in one search")
-    async def aircraftinfo(self,interaction: discord.Interaction, callsign: Optional[str] = None, cid: Optional[str] = None):
-        vatsim_pilot_data = await utils.fetch_vatsim_api(callsign.upper())
-        if callsign:
+    async def aircraftinfo(self,interaction: discord.Interaction, callsign: Optional[str] = None, cid: Optional[int] = None):
+        if callsign and cid == None:
+            vatsim_pilot_data = await utils.fetch_vatsim_api(callsign.upper())
             view = View(vatsim_pilot_data, self.icao_airlines)
             view.create_vatsimradar_button(vatsim_pilot_data)
             await interaction.response.send_message(view=view)
-        elif cid:
-            pass
+        elif cid and callsign == None:
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://data.vatsim.net/v3/vatsim-data.json') as rawdata:
+                    vatsim_pilot_data = await rawdata.json()
+            for pilot in vatsim_pilot_data["pilots"]:
+                if pilot["cid"] == cid:
+                    vatsim_pilot_data = pilot
+            view = View(vatsim_pilot_data, self.icao_airlines)
+            view.create_vatsimradar_button(vatsim_pilot_data)
+            await interaction.response.send_message(view=view)
         elif callsign and cid:
-            pass
+            failure_embed = discord.Embed(title="Please fill in one search")
+            await interaction.response.send_message(embed=failure_embed)
             
 class View(ui.LayoutView):
     def __init__(self, vatsim_pilot_data, icao_airlines):
@@ -72,8 +81,9 @@ class View(ui.LayoutView):
         
         self.add_item(row)
     def add_to_containerDefaultFormat(self, container, title, dict_key, in_flight_plan, extra_str):
+        flight_plan = self.vatsim_pilot_data.get("flight_plan")
         if in_flight_plan == True:
-            value = self.vatsim_pilot_data.get(["flight_plan"][dict_key], "None")
+            value = flight_plan.get(dict_key ,"None")
         else:
             value = self.vatsim_pilot_data[dict_key]
         container.add_item(
