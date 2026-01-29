@@ -105,7 +105,7 @@ def departure_arrival_board_commands(bot):
                 button_label = f"{pilot.get("callsign")}"
 
                 if self.is_for_departureBoard == True:
-                    container.add_item( # rat
+                    container.add_item(
                         ui.Section(  
                             ui.TextDisplay(
                                 f"### {pilot.get("callsign")} - {str(pilot.get("cid"))} \n-# Departing to {self.airportname_database.get(pilot_target_icao_code, {}).get("name")}"
