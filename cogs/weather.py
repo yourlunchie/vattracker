@@ -31,8 +31,8 @@ class Weather(commands.Cog):
                 weatherembed.add_field(name="Winds", value=f"{weatherdata["wdir"]}° at {weatherdata["wspd"]}kts", inline=False)
             
             #temperature and dew point
-            weatherembed.add_field(name="Temperature", value=f"{weatherdata["temp"]}°C", inline=True)
-            weatherembed.add_field(name="Dew Point", value=f"{weatherdata["dewp"]}°C", inline=True)
+            weatherembed.add_field(name="Temperature", value=f"{round(weatherdata["temp"], 0)}°C", inline=True)
+            weatherembed.add_field(name="Dew Point", value=f"{round(weatherdata["dewp"], 0)}°C", inline=True)
 
             #clouds
             cloudembedvalue = ""
@@ -52,6 +52,8 @@ class Weather(commands.Cog):
             inhgaltimeterunrounded = weatherdata["altim"] * 0.029529983071445
             inhgaltimeter = round(inhgaltimeterunrounded, 2)
             finalinhg = str(inhgaltimeter)
+            if len(finalinhg) == 4:
+                finalinhg += "0"
             # HPA altimeter rounding
             hparounded = round(int(weatherdata["altim"]), 0)
             hparoundedstr = str(hparounded)
