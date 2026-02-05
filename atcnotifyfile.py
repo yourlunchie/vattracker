@@ -1,5 +1,4 @@
 import discord
-import requests
 import json
 from discord import app_commands
 from typing import Optional
