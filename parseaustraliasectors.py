@@ -1,13 +1,16 @@
 import asyncio
-import requests
+import aiohttp
 
 
 async def parseaustraliasectors():
 # add async def later
 # here i am trying to get a LIST of extended sectors (ARL, WOL, etc., then return it to the main file)
     extendedsectorslist = []
-    vatsimdataraw = requests.get("https://data.vatsim.net/v3/vatsim-data.json")
-    vatsimdata = vatsimdataraw.json()
+    
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://data.vatsim.net/v3/vatsim-data.json") as response:
+            vatsimdata = await response.json()
+    
     controllerdata = vatsimdata["controllers"]
     for controller in controllerdata:
         found_controller = None

@@ -1,4 +1,3 @@
-import requests
 import discord
 from datetime import datetime,timezone
 import time

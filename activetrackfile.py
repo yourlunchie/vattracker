@@ -4,7 +4,6 @@ from discord.ext import commands
 from shapely.geometry import shape, Point
 import json
 from discord.ext import tasks
-import requests
 import parseaustraliasectors
 import aiohttp
 
@@ -63,7 +62,9 @@ def starttrackloop(bot):
     async def trackloop():
         tracksdata = read_or_create_file("currenttracks.json")
         
-        vatsimdata = requests.get("https://data.vatsim.net/v3/vatsim-data.json").json()
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://data.vatsim.net/v3/vatsim-data.json") as response:
+                vatsimdata = await response.json()
 
         for callsign, track in tracksdata.items():
             try:
@@ -263,7 +264,10 @@ def starttrackloop(bot):
 
     @tasks.loop(seconds=30)
     async def deletionloop():
-        vatsimdata = requests.get("https://data.vatsim.net/v3/vatsim-data.json").json()
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://data.vatsim.net/v3/vatsim-data.json") as response:
+                vatsimdata = await response.json()
+                
         trackdata = read_or_create_file("currenttracks.json")
         trackdata_copy = trackdata.copy()
         for aircraft, items in trackdata.items():
