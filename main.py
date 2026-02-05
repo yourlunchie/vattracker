@@ -5,7 +5,6 @@ import os
 import logging
 import activetrackfile
 import atcnotifyfile as atcnotifyfile
-import atcinfo
 import departure_arrivalboard
 
 load_dotenv(".env")
@@ -21,7 +20,6 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 
 activetrackfile.activetrackcommand(bot)
 atcnotifyfile.atcnotifycommands(bot)
-atcinfo.atcinfocommand(bot)
 departure_arrivalboard.departure_arrival_board_commands(bot)
 
 @bot.event
@@ -31,6 +29,7 @@ async def on_ready():
     
     await bot.load_extension("cogs.aircraftinfo")
     await bot.load_extension("cogs.weather")
+    await bot.load_extension("cogs.atcinfo")
     # load any cogs above
     await bot.tree.sync()
     
