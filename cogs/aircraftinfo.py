@@ -44,7 +44,10 @@ class View(ui.LayoutView):
         #start creating the container and all the info inside
         container = ui.Container()     
         #name of the guy and time elapsed
-        time_online = utils.convert_time(vatsim_pilot_data["logon_time"])
+        if vatsim_pilot_data["logon_time"] != None or vatsim_pilot_data["logon_time"] != "":
+            time_online = utils.convert_time(vatsim_pilot_data["logon_time"])
+        else:
+            time_online = "Unknown"
         container.add_item(
             ui.TextDisplay(f"# Information about {vatsim_pilot_data["callsign"]} on VATSIM\n-# {vatsim_pilot_data["name"]} - {vatsim_pilot_data["cid"]} (Online {time_online})")
         )
