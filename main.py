@@ -30,6 +30,7 @@ async def on_ready():
     await bot.load_extension("cogs.aircraftinfo")
     await bot.load_extension("cogs.weather")
     await bot.load_extension("cogs.atcinfo")
+    await bot.load_extension("cogs.activetrackwip")
     # load any cogs above
     await bot.tree.sync()
     
