@@ -34,7 +34,7 @@ async def on_ready():
     # load any cogs above
     await bot.tree.sync()
     
-    activetrackfile.starttrackloop(bot)
+    # activetrackfile.starttrackloop(bot) we are disabling for TESTING of new activetrack
     atcnotifyfile.atcnotifyloop(bot)
     if channel:
         await channel.send("hello world! run /help to look for commands!")
