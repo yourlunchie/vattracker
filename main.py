@@ -18,7 +18,7 @@ intents = discord.Intents.default()
 
 bot = commands.Bot(command_prefix="/", intents=intents)
 
-activetrackfile.activetrackcommand(bot)
+# activetrackfile.activetrackcommand(bot)
 atcnotifyfile.atcnotifycommands(bot)
 departure_arrivalboard.departure_arrival_board_commands(bot)
 
