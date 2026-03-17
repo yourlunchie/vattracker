@@ -30,7 +30,8 @@
     "NAT_FSS": { "facility": "CZQO", "callsign": "Gander Radio" },
     "TOR_CTR": { "facility": "CZYZ", "callsign": "Toronto Center" },
     "WPG_CTR": { "facility": "CZWG", "callsign": "Winnipeg Center" },
-    "MTL_CTR": { "facility": "CZUL", "callsign": "Montreal Center" }
+    "MTL_CTR": { "facility": "CZUL", "callsign": "Montreal Center" },
+    "SJU_CTR": { "facility": "TJZS", "callsign": "San Juan Center"}
     },
 
     "vatuk": {

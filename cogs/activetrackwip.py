@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord import app_commands
 import json
 from pathlib import Path
-import utils
 from utils import read_or_create_file
 from parseaustraliasectors import parseaustraliasectors
 import asyncio
@@ -27,12 +26,12 @@ class ActiveTrackCommand(commands.Cog):
             json.dump(self.currenttracks, file, indent=4)
         tracking_begunEmbed = discord.Embed(title=f"Tracking begun for {callsign.upper()}", description="Tracking begun! Please turn on DMs from bots to receive activetrack notifications.")
         await interaction.response.send_message(embed=tracking_begunEmbed)
-        print(self.currenttracks)
         
 class ActiveTrackLoop():
     def __init__(self, bot):
+        super().__init__()
+        
         self.bot = bot
-        self.interval = 5
         self.running = False
         self.artcc_polygons = self.build_artcc_polygons()
         self.current_tracks = ActiveTrackCommand(bot)
@@ -56,9 +55,32 @@ class ActiveTrackLoop():
             async with session.get("https://data.vatsim.net/v3/vatsim-data.json") as payload:
                 vatsim_data = await payload.json()
                 return vatsim_data
-
+            
+    async def assemble_message(self):
+        counter = 0
+        center_callsignP = self.center_controller["parsed_callsign"]
+        center_callsign = self.center_controller["callsign"]
+        center_frequency = self.center_controller["frequency"]
+        center_name = self.center_controller["name"]
+        if center_callsignP != "none":
+            for controller in self.vatsim_data["controllers"]:
+                if controller["callsign"][:3] + "_" + controller["callsign"][-3:] == center_callsignP:
+                    counter += 1
+        else:
+            counter = -1 #this indicates there is inherently no split available for a center
+        if counter == 1 or counter == 0:
+            if center_frequency == "none" and center_name == "none":
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}**"
+            elif center_name == "none":
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** ({center_frequency})"
+            else:
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** ({center_frequency}) - {center_name}"
+    
     async def loop(self):
         while self.running:
+            
+            self.current_tracks.currenttracks = read_or_create_file("currenttracks.json")
+            
             self.vatsim_data = await self.fetch_vatsim_data()
             
             CTR_controllers = {}
@@ -105,15 +127,78 @@ class ActiveTrackLoop():
                     pass
                 
             # ok controller list done now pilot handling
-            for track in self.current_tracks.currenttracks:
+            for track, item in self.current_tracks.currenttracks.items():
+                self.artcc = None
+                
+                self.current_trackinTrack = track
+                self.current_iteminTrack = item
                 for pilot in self.vatsim_data["pilots"]:
                     if pilot["callsign"] == track:
                         longitude = pilot["longitude"]
                         latitude = pilot["latitude"]
-            
-            print(CTR_controllers)
-            await asyncio.sleep(self.interval)
+                        point = Point(longitude,latitude)
+                        for feature, featureitem in self.artcc_polygons.items():
+                            if point.within(featureitem["polygon"]):
+                                self.artcc = feature[:4]
+                                break
+                                
+                        # now we know what artcc they are in, we cross reference what artccs are online
+                        if self.artcc in CTR_controllers and self.artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"]:
+                            userid = await self.bot.fetch_user(item["user_id"])
+                            
+                            self.center_controller = CTR_controllers[self.artcc]
+                           
+                            message = await self.assemble_message()
+                            self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(self.artcc)
+                            
+                            with open("currenttracks.json", "w") as file:
+                               json.dump(self.current_tracks.currenttracks, file, indent=4)
+                            
+                            try:
+                                await userid.send(message)
+                            except:
+                                pass
+                            
+            await asyncio.sleep(5)
     
+    def start(self):
+        if not self.running:
+            self.running = True
+            self.task = asyncio.create_task(self.loop())
+            
+    def stop(self):
+        self.running=False
+
+    def cancel(self):
+        if self.task:
+            self.task.cancel()
+            
+class DeletionLoop():
+    def __init__(self, bot):
+        self.trackloop = ActiveTrackLoop(bot)
+        self.running = False
+    
+    async def loop(self):
+        while self.running:
+            
+            self.vatsim_data = await self.trackloop.fetch_vatsim_data()
+            
+            current_tracks = read_or_create_file("currenttracks.json")
+            current_tracksCopy = current_tracks.copy()
+                
+            for track, item in current_tracks.items():
+                found = False
+                for pilot in self.vatsim_data["pilots"]:
+                    if pilot["callsign"] == track:
+                        found = True
+                if found == False:
+                    del current_tracksCopy[track]
+            
+            with open("currenttracks.json", "w") as file:
+                json.dump(current_tracksCopy, file, indent=4)
+            
+            await asyncio.sleep(3)
+            
     def start(self):
         if not self.running:
             self.running = True
@@ -131,4 +216,7 @@ async def setup(bot):
     
     loop = ActiveTrackLoop(bot)
     loop.start()
+    
+    deletionLoop = DeletionLoop(bot)
+    deletionLoop.start()
     
