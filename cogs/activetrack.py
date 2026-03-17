@@ -18,8 +18,8 @@ class ActiveTrackCommand(commands.Cog):
         self.bot = bot
         self.currenttracks = read_or_create_file("currenttracks.json")
         
-    @app_commands.command(name="activetrackwip",description="Tracks your aircraft on the network, and DMs you if entering an active ARTCC/FIR")
-    async def activetrackwip(self, interaction: discord.Interaction, callsign: str, ping_in_advance_miles: Optional[int] = 0):
+    @app_commands.command(name="activetrack",description="Tracks your aircraft on the network, and DMs you if entering an active ARTCC/FIR")
+    async def activetrack(self, interaction: discord.Interaction, callsign: str, ping_in_advance_miles: Optional[int] = 0):
         self.currenttracks = read_or_create_file("currenttracks.json")
         self.currenttracks[callsign.upper()] = {
             "user_id": interaction.user.id,
