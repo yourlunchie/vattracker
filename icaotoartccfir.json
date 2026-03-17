@@ -1,113 +1,56 @@
 {
-    "america": {
- 
-        "KZAB": [
-            {"identifier": "ABQ_CTR", "callsign": "Albuquerque Center"}
-        ],
-        "KZHU": [
-            {"identifier": "HOU_CTR", "callsign": "Houston Center"}
-        ],
-        "KZAU": [
-            {"identifier": "CHI_CTR", "callsign": "Chicago Center"}
-        ],
-        "KZBW": [
-            {"identifier": "BOS_CTR", "callsign": "Boston Center"}
-        ],
-        "KZDC": [
-            {"identifier": "DC__CTR", "callsign": "Washington Center"}
-        ],
-        "KZDV": [
-            {"identifier": "DEN_CTR", "callsign": "Denver Center"}
-        ],
-        "KZFW": [
-            {"identifier": "FTW_CTR", "callsign": "Fort Worth Center"}
-        ],
-        "KZID": [
-            {"identifier": "IND_CTR", "callsign": "Indianapolis Center"}
-        ],
-        "KZJX": [
-            {"identifier": "JAX_CTR", "callsign": "Jacksonville Center"}
-        ],
-        "KZKC": [
-            {"identifier": "KC__CTR", "callsign": "Kansas City Center"}
-        ],
-        "KZLA": [
-            {"identifier": "LAX_CTR", "callsign": "Los Angeles Center"}
-        ],
-        "KZLC": [
-            {"identifier": "SLC_CTR", "callsign": "Salt Lake City Center"}
-        ],
-        "KZMA": [
-            {"identifier": "MIA_CTR", "callsign": "Miami Center"}
-        ],
-        "KZME": [
-            {"identifier": "MEM_CTR", "callsign": "Memphis Center"}
-        ],
-        "KZMP": [
-            {"identifier": "MSP_CTR", "callsign": "Minneapolis Center"}
-        ],
-        "KZNY": [
-            {"identifier": "NY__CTR", "callsign": "New York Center"}
-        ],
-        "KZOA": [
-            {"identifier": "OAK_CTR", "callsign": "Oakland Center"}
-        ],
-        "KZOB": [
-            {"identifier": "CLE_CTR", "callsign": "Cleveland Center"}
-        ],
-        "KZSE": [
-            {"identifier": "SEA_CTR", "callsign": "Seattle Center"}
-        ],
-        "KZTL": [
-            {"identifier": "ATL_CTR", "callsign": "Atlanta Center"}
-        ],
-        "KZAK": [
-            {"identifier": "ZAK_FSS", "callsign": "Oakland Oceanic"}
-        ],
-        "PHZH": [
-            {"identifier": "HNL_CTR", "callsign": "Honolulu Center"}
-        ],
-        "PAZA": [
-            {"identifier": "ANC_CTR", "callsign": "Anchorage Center"}
-        ]
+    "everything_else": {
+    "ABQ_CTR": { "facility": "KZAB", "callsign": "Albuquerque Center" },
+    "HOU_CTR": { "facility": "KZHU", "callsign": "Houston Center" },
+    "CHI_CTR": { "facility": "KZAU", "callsign": "Chicago Center" },
+    "BOS_CTR": { "facility": "KZBW", "callsign": "Boston Center" },
+    "DC__CTR": { "facility": "KZDC", "callsign": "Washington Center" },
+    "DEN_CTR": { "facility": "KZDV", "callsign": "Denver Center" },
+    "FTW_CTR": { "facility": "KZFW", "callsign": "Fort Worth Center" },
+    "IND_CTR": { "facility": "KZID", "callsign": "Indianapolis Center" },
+    "JAX_CTR": { "facility": "KZJX", "callsign": "Jacksonville Center" },
+    "KC__CTR": { "facility": "KZKC", "callsign": "Kansas City Center" },
+    "LAX_CTR": { "facility": "KZLA", "callsign": "Los Angeles Center" },
+    "SLC_CTR": { "facility": "KZLC", "callsign": "Salt Lake City Center" },
+    "MIA_CTR": { "facility": "KZMA", "callsign": "Miami Center" },
+    "MEM_CTR": { "facility": "KZME", "callsign": "Memphis Center" },
+    "MSP_CTR": { "facility": "KZMP", "callsign": "Minneapolis Center" },
+    "NY__CTR": { "facility": "KZNY", "callsign": "New York Center" },
+    "OAK_CTR": { "facility": "KZOA", "callsign": "Oakland Center" },
+    "CLE_CTR": { "facility": "KZOB", "callsign": "Cleveland Center" },
+    "SEA_CTR": { "facility": "KZSE", "callsign": "Seattle Center" },
+    "ATL_CTR": { "facility": "KZTL", "callsign": "Atlanta Center" },
+    "ZAK_FSS": { "facility": "KZAK", "callsign": "Oakland Oceanic" },
+    "HNL_CTR": { "facility": "PHZH", "callsign": "Honolulu Center" },
+    "ANC_CTR": { "facility": "PAZA", "callsign": "Anchorage Center" },
+    "HKG_CTR": { "facility": "VHHK", "callsign": "Hong Kong Radar"},
+    "VCL_CTR": { "facility": "XVCL", "callsign": "Mekong Radar" },
+    "MNL_CTR": { "facility": "RPHI", "callsign": "Manila Control" },
+    "TPE_CTR": { "facility": "RCAA", "callsign": "Taipei Control" },
+    "NAT_FSS": { "facility": "CZQO", "callsign": "Gander Radio" },
+    "TOR_CTR": { "facility": "CZYZ", "callsign": "Toronto Center" },
+    "WPG_CTR": { "facility": "CZWG", "callsign": "Winnipeg Center" },
+    "MTL_CTR": { "facility": "CZUL", "callsign": "Montreal Center" },
+    "SJU_CTR": { "facility": "TJZS", "callsign": "San Juan Center"}
     },
-    "london": {
-        "EGTT": {"identifier": "LON_CTR", "callsign": "London Control - Combined"},
-        "EGTT-C": {"identifier": "LON_C_CTR", "callsign": "London Control - Central"},
-        "EGTT-D": {"identifier": "LON_D_CTR", "callsign": "London Control - Dover"},
-        "EGTT-E": {"identifier": "LON_E_CTR", "callsign": "London Control - Clacton"},
-        "EGTT-M": {"identifier": "LON_M_CTR", "callsign": "London Control - Daventry"},
-        "EGTT-N": {"identifier": "LON_N_CTR", "callsign": "London Control - North"},
-        "EGTT-NE": {"identifier": "LON_NE_CTR", "callsign": "London Control - North Sea"},
-        "EGTT-NW": {"identifier": "LON_NW_CTR", "callsign": "London Control - Lakes"},
-        "EGTT-S": {"identifier": "LON_S_CTR", "callsign": "London Control - South"},
-        "EGTT-SC": {"identifier": "LON_SC_CTR", "callsign": "London Control - South Central"},
-        "EGTT-W": {"identifier": "LON_W_CTR", "callsign": "London Control - West"}
-    },
-    "scottish": {
-        "EGPX": {"identifier": "SCO_CTR", "callsign": "Scottish Control - Combined"},
-        "EGPX-WD": {"identifier": "SCO_WD_CTR", "callsign": "Scottish Control - West/Deancross"},
-        "EGPX-W": {"identifier": "SCO_W_CTR", "callsign": "Scottish Control - Rathlin"},
-        "EGPX-S": {"identifier": "SCO_S_CTR", "callsign": "Scottish Control - South"},
-        "EGPX-N": {"identifier": "SCO_N_CTR", "callsign": "Scottish Control - North"},
-        "EGPX-D":{"identifier": "SCO_D_CTR", "callsign": "Scottish Control - Deancross"},
-        "EGPX-E": {"identifier": "SCO_W_CTR", "callsign": "Scottish Control - West"}
-    },
-    "specialasia": {
-        "VHHK": {"identifier": "HKG_CTR", "callsign": "Hong Kong Radar"},
-        "XVCL": {"identifier": "VCL_CTR", "callsign": "Mekong Radar"},
-        "RPHI": {"identifier": "MNL_CTR", "callsign": "Manila Control"},
-        "RCAA": {"identifier": "TPE_CTR", "callsign": "Taipei Control"}
-    },
-    "shanwickgander": {
-        "EGGX": {"identifier": "NAT_FSS", "callsign": "Shanwick Radio"},
-        "CZQO": {"identifier": "NAT_FSS", "callsign": "Gander Radio"}
-    },
-    "canada": {
-        "CZYZ": {"identifier": "TOR_CTR", "callsign": "Toronto Center"},
-        "CZWG": {"identifier": "WPG_CTR", "callsign": "Winnipeg Center"},
-        "CZUL": {"identifier": "MTL_CTR", "callsign": "Montreal Center"}
+
+    "vatuk": {
+    "LON_CTR": { "facility": "EGTT", "callsign": "London Control - Combined" },
+    "LON_C_CTR": { "facility": "EGTT-C", "callsign": "London Control - Central" },
+    "LON_D_CTR": { "facility": "EGTT-D", "callsign": "London Control - Dover" },
+    "LON_E_CTR": { "facility": "EGTT-E", "callsign": "London Control - Clacton" },
+    "LON_M_CTR": { "facility": "EGTT-M", "callsign": "London Control - Daventry" },
+    "LON_N_CTR": { "facility": "EGTT-N", "callsign": "London Control - North" },
+    "LON_NE_CTR": { "facility": "EGTT-NE", "callsign": "London Control - North Sea" },
+    "LON_NW_CTR": { "facility": "EGTT-NW", "callsign": "London Control - Lakes" },
+    "LON_S_CTR": { "facility": "EGTT-S", "callsign": "London Control - South" },
+    "LON_SC_CTR": { "facility": "EGTT-SC", "callsign": "London Control - South Central" },
+    "LON_W_CTR": { "facility": "EGTT-W", "callsign": "London Control - West" },
+    "SCO_CTR": { "facility": "EGPX", "callsign": "Scottish Control - Combined" },
+    "SCO_WD_CTR": { "facility": "EGPX-WD", "callsign": "Scottish Control - West/Deancross" },
+    "SCO_W_CTR": { "facility": "EGPX-W", "callsign": "Scottish Control - Rathlin" },
+    "SCO_S_CTR": { "facility": "EGPX-S", "callsign": "Scottish Control - South" },
+    "SCO_N_CTR": { "facility": "EGPX-N", "callsign": "Scottish Control - North" },
+    "SCO_D_CTR": { "facility": "EGPX-D", "callsign": "Scottish Control - Deancross" }
     }
 }
-
-

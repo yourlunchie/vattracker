@@ -18,7 +18,7 @@ intents = discord.Intents.default()
 
 bot = commands.Bot(command_prefix="/", intents=intents)
 
-activetrackfile.activetrackcommand(bot)
+# activetrackfile.activetrackcommand(bot)
 atcnotifyfile.atcnotifycommands(bot)
 departure_arrivalboard.departure_arrival_board_commands(bot)
 
@@ -30,10 +30,11 @@ async def on_ready():
     await bot.load_extension("cogs.aircraftinfo")
     await bot.load_extension("cogs.weather")
     await bot.load_extension("cogs.atcinfo")
+    await bot.load_extension("cogs.activetrackwip")
     # load any cogs above
     await bot.tree.sync()
     
-    activetrackfile.starttrackloop(bot)
+    # activetrackfile.starttrackloop(bot) we are disabling for TESTING of new activetrack
     atcnotifyfile.atcnotifyloop(bot)
     if channel:
         await channel.send("hello world! run /help to look for commands!")
