@@ -44,8 +44,11 @@ class ActiveTrackLoop():
         
     def build_artcc_polygons(self):
         artcc_polygons = {}
-        current_directory = Path.cwd()
-        with open(f"{current_directory}\\Boundaries.geojson", "r") as file:
+        
+        base_dir = Path(__file__).resolve().parent.parent
+        geojson_path = base_dir / "Boundaries.geojson"
+        
+        with open(geojson_path, "r") as file:
             artcc_polygonsRaw = json.load(file)
         for feature in artcc_polygonsRaw["features"]:
             artcc_polygons[feature["properties"]["id"]] = {
