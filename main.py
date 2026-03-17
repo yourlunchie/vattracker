@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import os
 import logging
-import activetrackfile
 import atcnotifyfile as atcnotifyfile
 import departure_arrivalboard
 
@@ -30,7 +29,7 @@ async def on_ready():
     await bot.load_extension("cogs.aircraftinfo")
     await bot.load_extension("cogs.weather")
     await bot.load_extension("cogs.atcinfo")
-    await bot.load_extension("cogs.activetrackwip")
+    await bot.load_extension("cogs.activetrack")
     # load any cogs above
     await bot.tree.sync()
     
