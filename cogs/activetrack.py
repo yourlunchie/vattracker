@@ -75,6 +75,7 @@ class ActiveTrackLoop():
                     counter += 1
         else:
             counter = -1 #this indicates there is inherently no split available for a center
+        print(counter)
         if counter == 1 or counter == 0:
             if center_frequency == "none" and center_name == "none":
                 return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}**"
@@ -82,6 +83,16 @@ class ActiveTrackLoop():
                 return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** ({center_frequency})"
             else:
                 return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** ({center_frequency}) - {center_name}"
+        if counter >= 2:
+            if center_frequency == "none" and center_name == "none" or center_name == "none":
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsignP}**"
+            else:
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsignP}** - {center_name}"
+        else: 
+            if center_frequency == "none" and center_name == "none":
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}**"
+            else:
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** - {center_name}"
     
     async def find_location_in_advance(self):
         radian = math.radians(self.heading)
