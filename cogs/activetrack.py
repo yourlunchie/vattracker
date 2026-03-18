@@ -75,7 +75,6 @@ class ActiveTrackLoop():
                     counter += 1
         else:
             counter = -1 #this indicates there is inherently no split available for a center
-        print(counter)
         if counter == 1 or counter == 0:
             if center_frequency == "none" and center_name == "none":
                 return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}**"
