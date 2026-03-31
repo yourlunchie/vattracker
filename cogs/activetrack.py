@@ -39,6 +39,7 @@ class ActiveTrackLoop():
         self.running = False
         self.artcc_polygons = self.build_artcc_polygons()
         self.current_tracks = ActiveTrackCommand(bot)
+        self.blocked_artccs = ["EGTM", "EGVV"] # blocked because these overlay EGTT (and you prolly dont need these two - most people cruise over FL245 for EGTM to matter)
         with open("icaotoartccfir.json", "r") as file:
             self.icaotoartcc = json.load(file)
         
@@ -91,7 +92,7 @@ class ActiveTrackLoop():
             if center_frequency == "none" and center_name == "none":
                 return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}**"
             else:
-                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** - {center_name}"
+                return f"<@{self.current_iteminTrack["user_id"]}>, your flight **{self.current_trackinTrack}** is entering **{center_callsign}** ({center_frequency}) - {center_name}"
     
     async def find_location_in_advance(self):
         radian = math.radians(self.heading)
@@ -101,7 +102,7 @@ class ActiveTrackLoop():
         
         shrink_ray = math.cos(math.radians(self.latitude_pre))
         longitude_add = opposite / (60 * shrink_ray)
-        latitude_add = adjacent / 60 # convert latitude to minutes of a degree from degree
+        latitude_add = adjacent / 60 # convert latitude from minutes of a degree to degree
         
         latitude = self.latitude_pre + latitude_add
         longitude = self.longitude_pre + longitude_add
@@ -117,14 +118,15 @@ class ActiveTrackLoop():
                 
                 CTR_controllers = {}
                 list_australianSectors = await parseaustraliasectors()
-                for sector in list_australianSectors:
-                    sector_callsign = "Y" + sector
-                    CTR_controllers[sector_callsign] = {
-                        "callsign": sector_callsign + "_CTR",
-                        "parsed_callsign": "none",
-                        "frequency": "none",
-                        "name": "none"
-                    }
+                if list_australianSectors != None:
+                    for sector in list_australianSectors:
+                        sector_callsign = "Y" + sector
+                        CTR_controllers[sector_callsign] = {
+                            "callsign": sector_callsign + "_CTR",
+                            "parsed_callsign": "none",
+                            "frequency": "none",
+                            "name": "none"
+                        }
                 
                 for controller in self.vatsim_data["controllers"]:
                     if controller["callsign"][-3:] == "CTR" or controller["callsign"][-3:] == "FSS":
@@ -154,7 +156,7 @@ class ActiveTrackLoop():
                                 "frequency": controller["frequency"],
                                 "name": "none"
                             }
-                        
+
                     else:
                         pass
                     
@@ -180,18 +182,34 @@ class ActiveTrackLoop():
                                 point = Point(longitude2, latitude2)
                                 
                             for feature, featureitem in self.artcc_polygons.items():
-                                if point.within(featureitem["polygon"]):
-                                    self.artcc = feature[:4]
-                                    break
+                                if feature[:4] not in self.blocked_artccs:
+                                    if point.within(featureitem["polygon"]):
+                                        self.artcc = feature
+                                        self.secondary_artcc = "None"
+                                        for secondary_feature, secondary_featureItem in self.artcc_polygons.items():
+                                            if point.within(secondary_featureItem["polygon"]) and secondary_feature[:4] == feature[:4] and secondary_feature[:4] not in self.blocked_artccs and feature != secondary_feature:
+                                                self.secondary_artcc = secondary_feature
+                                                
+                                            if self.artcc[:4] == self.secondary_artcc[:4]:
+                                                break
+                                            else:
+                                                pass
+                                        break
+                                else:
+                                    pass
                                     
                             # now we know what artcc they are in, we cross reference what artccs are online
-                            if self.artcc in CTR_controllers and self.artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"]:
+                            if self.artcc in CTR_controllers and self.artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"] or self.secondary_artcc in CTR_controllers and self.secondary_artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"]:
                                 userid = await self.bot.fetch_user(item["user_id"])
                                 
-                                self.center_controller = CTR_controllers[self.artcc]
+                                try:
+                                    self.center_controller = CTR_controllers[self.artcc]
+                                    self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(self.artcc)
+                                except:
+                                    self.center_controller = CTR_controllers[self.secondary_artcc]
+                                    self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(self.secondary_artcc)
                             
                                 message = await self.assemble_message()
-                                self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(self.artcc)
                                 
                                 with open("currenttracks.json", "w") as file:
                                     json.dump(self.current_tracks.currenttracks, file, indent=4)
@@ -200,6 +218,7 @@ class ActiveTrackLoop():
                                     await userid.send(message)
                                 except:
                                     pass
+                        
             except Exception as e:
                 print(e)
                 traceback.print_exc()
@@ -264,4 +283,3 @@ async def setup(bot):
     
     deletionLoop = DeletionLoop(bot)
     deletionLoop.start()
-    
