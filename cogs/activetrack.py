@@ -35,8 +35,8 @@ class ActiveTrackCommand(commands.Cog):
     async def removeactivetrack(self, interaction: discord.Interaction, callsign: str):
         self.currenttracks = read_or_create_file("currenttracks.json")
         track = self.currenttracks.get(callsign.upper(), "none")
-        if track == "none":
-            no_trackEmbed = discord.Embed(title=f"No track for {callsign.upper()} was initiated, please try another callsign")
+        if track == "none" or interaction.user.id != track["user_id"]:
+            no_trackEmbed = discord.Embed(title=f"No track for {callsign.upper()} was initiated, or you did not initiate this track")
             await interaction.response.send_message(embed=no_trackEmbed)
         else:
             del self.currenttracks[callsign.upper()]
