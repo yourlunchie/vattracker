@@ -31,6 +31,20 @@ class ActiveTrackCommand(commands.Cog):
         tracking_begunEmbed = discord.Embed(title=f"Tracking begun for {callsign.upper()}", description="Tracking begun! Please turn on DMs from bots to receive activetrack notifications.")
         await interaction.response.send_message(embed=tracking_begunEmbed)
         
+    @app_commands.command(name="removeactivetrack",description="Removes track on any aircraft")
+    async def removeactivetrack(self, interaction: discord.Interaction, callsign: str):
+        self.currenttracks = read_or_create_file("currenttracks.json")
+        track = self.currenttracks.get(callsign.upper(), "none")
+        if track == "none":
+            no_trackEmbed = discord.Embed(title=f"No track for {callsign.upper()} was initiated, please try another callsign")
+            await interaction.response.send_message(embed=no_trackEmbed)
+        else:
+            del self.currenttracks[callsign.upper()]
+            with open("currenttracks.json", "w") as file:
+                json.dump(self.currenttracks, file, indent=4)
+            successEmbed = discord.Embed(title=f"Track for {callsign.upper()} successfully removed")
+            await interaction.response.send_message(embed=successEmbed)
+        
 class ActiveTrackLoop():
     def __init__(self, bot):
         super().__init__()
