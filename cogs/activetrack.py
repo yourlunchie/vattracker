@@ -35,8 +35,8 @@ class ActiveTrackCommand(commands.Cog):
     async def removeactivetrack(self, interaction: discord.Interaction, callsign: str):
         self.currenttracks = read_or_create_file("currenttracks.json")
         track = self.currenttracks.get(callsign.upper(), "none")
-        if track == "none":
-            no_trackEmbed = discord.Embed(title=f"No track for {callsign.upper()} was initiated, please try another callsign")
+        if track == "none" or interaction.user.id != track["user_id"]:
+            no_trackEmbed = discord.Embed(title=f"No track for {callsign.upper()} was initiated, or you did not initiate this track")
             await interaction.response.send_message(embed=no_trackEmbed)
         else:
             del self.currenttracks[callsign.upper()]
@@ -183,6 +183,8 @@ class ActiveTrackLoop():
                     for pilot in self.vatsim_data["pilots"]:
                         if pilot["callsign"] == track:
                             
+                            self.artccs = []
+                            
                             if item["miles_in_advance"] == 0:
                                 longitude = pilot["longitude"]
                                 latitude = pilot["latitude"]
@@ -198,40 +200,27 @@ class ActiveTrackLoop():
                             for feature, featureitem in self.artcc_polygons.items():
                                 if feature[:4] not in self.blocked_artccs:
                                     if point.within(featureitem["polygon"]):
-                                        self.artcc = feature
-                                        self.secondary_artcc = "None"
-                                        for secondary_feature, secondary_featureItem in self.artcc_polygons.items():
-                                            if point.within(secondary_featureItem["polygon"]) and secondary_feature[:4] == feature[:4] and secondary_feature[:4] not in self.blocked_artccs and feature != secondary_feature:
-                                                self.secondary_artcc = secondary_feature
-                                                
-                                            if self.artcc[:4] == self.secondary_artcc[:4]:
-                                                break
-                                            else:
-                                                pass
-                                        break
-                                else:
-                                    pass
+                                        self.artccs.append(feature)
                                     
                             # now we know what artcc they are in, we cross reference what artccs are online
-                            if self.artcc in CTR_controllers and self.artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"] or self.secondary_artcc in CTR_controllers and self.secondary_artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"]:
-                                userid = await self.bot.fetch_user(item["user_id"])
-                                
-                                try:
-                                    self.center_controller = CTR_controllers[self.artcc]
-                                    self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(self.artcc)
-                                except:
-                                    self.center_controller = CTR_controllers[self.secondary_artcc]
-                                    self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(self.secondary_artcc)
-                            
-                                message = await self.assemble_message()
-                                
-                                with open("currenttracks.json", "w") as file:
-                                    json.dump(self.current_tracks.currenttracks, file, indent=4)
-                                
-                                try:
-                                    await userid.send(message)
-                                except:
-                                    pass
+                            for artcc in self.artccs:
+                                if artcc in CTR_controllers and artcc not in self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"]:
+                                    userid = await self.bot.fetch_user(item["user_id"])
+                                    
+                                    try:
+                                        self.center_controller = CTR_controllers[artcc]
+                                        self.current_tracks.currenttracks[pilot["callsign"]]["pinged_artccs"].append(artcc)
+                                        message = await self.assemble_message()
+                                    
+                                        with open("currenttracks.json", "w") as file:
+                                            json.dump(self.current_tracks.currenttracks, file, indent=4)
+                                        
+                                        await userid.send(message)
+                                        
+                                        break
+                                        
+                                    except:
+                                        pass
                         
             except Exception as e:
                 print(e)
