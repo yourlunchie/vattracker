@@ -17,7 +17,7 @@ class Weather(commands.Cog):
             weatherdata = weatherdatajson[0]
             weatherembed = discord.Embed(
                 title=f"Weather data for {airport.upper()}",
-                description=f"{weatherdata["name"]}, {weatherdata["lat"]}, {weatherdata["lon"]}",
+                description=f"{weatherdata["name"]}, {weatherdata["lat"]}, {weatherdata["lon"]} (Recorded at {weatherdata["receiptTime"][:19]})",
                 colour=discord.Color.dark_green()
             )
             weatherembed.add_field(name="Raw METAR", value=f"{weatherdata["rawOb"]}", inline=True)
