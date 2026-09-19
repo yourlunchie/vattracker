@@ -18,6 +18,18 @@ class ActiveTrackCommand(commands.Cog):
         self.bot = bot
         self.currenttracks = read_or_create_file("currenttracks.json")
         
+    def read_or_create_file(file_path: str, default_content=None):
+        if default_content is None:
+            default_content = {}
+        try:
+            with open(file_path, "r", encoding="utf-8") as file:
+                content = json.load(file)
+        except FileNotFoundError:
+            with open(file_path, "w", encoding="utf-8") as file:
+                json.dump(default_content, file, indent=4)
+            content = default_content
+        return content
+        
     @app_commands.command(name="activetrack",description="Tracks your aircraft on the network, and DMs you if entering an active ARTCC/FIR")
     async def activetrack(self, interaction: discord.Interaction, callsign: str, ping_in_advance_miles: Optional[int] = 0):
         self.currenttracks = read_or_create_file("currenttracks.json")
@@ -247,24 +259,26 @@ class DeletionLoop():
     
     async def loop(self):
         while self.running:
-            
-            self.vatsim_data = await self.trackloop.fetch_vatsim_data()
-            
-            current_tracks = read_or_create_file("currenttracks.json")
-            current_tracksCopy = current_tracks.copy()
+            try:
+                self.vatsim_data = await self.trackloop.fetch_vatsim_data()
                 
-            for track, item in current_tracks.items():
-                found = False
-                for pilot in self.vatsim_data["pilots"]:
-                    if pilot["callsign"] == track:
-                        found = True
-                if found == False:
-                    del current_tracksCopy[track]
-            
-            with open("currenttracks.json", "w") as file:
-                json.dump(current_tracksCopy, file, indent=4)
-            
-            await asyncio.sleep(3)
+                current_tracks = read_or_create_file("currenttracks.json")
+                current_tracksCopy = current_tracks.copy()
+                    
+                for track, item in current_tracks.items():
+                    found = False
+                    for pilot in self.vatsim_data["pilots"]:
+                        if pilot["callsign"] == track:
+                            found = True
+                    if found == False:
+                        del current_tracksCopy[track]
+                
+                with open("currenttracks.json", "w") as file:
+                    json.dump(current_tracksCopy, file, indent=4)
+                
+                await asyncio.sleep(3)
+            except:
+                await asyncio.sleep(3)
             
     def start(self):
         if not self.running:
@@ -277,6 +291,18 @@ class DeletionLoop():
     def cancel(self):
         if self.task:
             self.task.cancel()
+            
+    def read_or_create_file(file_path: str, default_content=None):
+        if default_content is None:
+            default_content = {}
+        try:
+            with open(file_path, "r", encoding="utf-8") as file:
+                content = json.load(file)
+        except FileNotFoundError:
+            with open(file_path, "w", encoding="utf-8") as file:
+                json.dump(default_content, file, indent=4)
+            content = default_content
+        return content
 
 async def setup(bot):
     await bot.add_cog(ActiveTrackCommand(bot))
